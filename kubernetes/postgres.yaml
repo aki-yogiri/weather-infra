@@ -27,8 +27,8 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
   nfs:
-    server: 172.31.46.54
-    path: /mnt/nfs/postgres
+    server: <host>
+    path: <mountpath>
 
 ---
 apiVersion: v1
