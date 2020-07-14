@@ -70,9 +70,9 @@ spec:
           env:
             - name: POSTGRES_USER
               value: <username>
-              name: POSTGRES_DB
+            - name: POSTGRES_DB
               value: <dbname>
-              name: POSTGRES_PASSWORD
+            - name: POSTGRES_PASSWORD
               value: <password>
           ports:
             - containerPort: 5432
@@ -80,7 +80,28 @@ spec:
           volumeMounts:
             - name: postgres
               mountPath: /va/lib/postgresql/data
+            - name: postgres-initdb
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: postgres
           persistentVolumeClaim:
             claimName: postgres-pvc
+        - name: postgres-initdb
+          configMap:
+            name: postgres-initdb-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-initdb-config
+data:
+  initdb.sql: |
+    create table weathers (
+        location varchar(100) not null,
+        weather varchar(100) not null,
+        temperature double precision,
+        clouds integer,
+        wind double precision,
+        wind_deg integer,
+        timestamp timestamp);
